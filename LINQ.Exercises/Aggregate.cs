@@ -28,6 +28,7 @@ namespace LINQ.Exercises
 
             Assert.AreEqual(2, result);
         }
+        //ss
 
         [TestMethod]
         public void Count_all_animals_having_character_count_equal_to_5()

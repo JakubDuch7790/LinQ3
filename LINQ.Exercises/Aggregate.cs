@@ -7,7 +7,7 @@ namespace LINQ.Exercises
     /// <summary>
     /// Your task is to apply LINQ `Count/Sum/Min/Max/Average/Aggregate` methods, so all tests will be passed.
     /// Make sure to preview test data located in TestData.cs file.
-    /// Don't modify assertions or test data, all you need to do is to apply LINQ method so `result` variable will have expected value(s).
+    /// Don't modify assertions or testa data, all you need to do is to apply LINQ method so `result` variable will have expected value(s).
     /// </summary>
     [TestClass]
     public class Aggregate
@@ -35,7 +35,7 @@ namespace LINQ.Exercises
         public void Count_all_animals_having_character_count_equal_to_5()
         {
             // Hint: use nested count
-            int result = TestData.Animals.Count();
+            int result = TestData.Animals.Where(a => a.Length==5).Count();
 
             Assert.AreEqual(2, result);
         }
@@ -43,7 +43,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Sum_all_numbers()
         {
-            int result = TestData.Numbers.Count();
+            int result = TestData.Numbers.Sum();
 
             Assert.AreEqual(-2, result);
         }
@@ -51,7 +51,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Sum_all_characters_in_animal_names()
         {
-            int result = TestData.Animals.Count();
+            int result = TestData.Animals.Sum(a  => a.Length);
 
             Assert.AreEqual(38, result);
         }
@@ -59,7 +59,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Sum_all_birth_years()
         {
-            int result = TestData.People.Count();
+            int result = TestData.People.Sum(p => p.Born.Year);
 
             Assert.AreEqual(7915, result);
         }
@@ -67,7 +67,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Find_minimum_number()
         {
-            int result = TestData.Numbers.Count();
+            int result = TestData.Numbers.Min();
 
             Assert.AreEqual(-5, result);
         }
@@ -75,7 +75,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Find_length_of_shortest_animal_name()
         {
-            int result = TestData.Animals.Count();
+            int result = TestData.Animals.Min(a => a.Length);
 
             Assert.AreEqual(4, result);
         }

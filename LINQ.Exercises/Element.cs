@@ -23,7 +23,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void First_n_less_than_0()
         {
-            int result = TestData.Numbers.First();
+            int result = TestData.Numbers.Where(x => x < 0).First();
 
             Assert.AreEqual(-3, result);
         }
@@ -31,7 +31,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Last_n_greater_than_0()
         {
-            int result = TestData.Numbers.Last();
+            int result = TestData.Numbers.Where(x => x > 0).Last();
 
             Assert.AreEqual(5, result);
         }
@@ -39,7 +39,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void First_even_n()
         {
-            int result = TestData.Numbers.First();
+            int result = TestData.Numbers.Where(x => x % 2 ==0).First();
 
             Assert.AreEqual(2, result);
         }
@@ -47,7 +47,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Last_even_n()
         {
-            int result = TestData.Numbers.Last();
+            int result = TestData.Numbers.Where(x => x % 2 == 0).Last();
 
             Assert.AreEqual(-4, result);
         }

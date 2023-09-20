@@ -120,6 +120,7 @@ namespace LINQ.Exercises
             Assert.AreEqual(-0.2, result);
         }
         //testing comment
+        //testing comment2
 
         [TestMethod]
         public void Find_average_of_birth_years()

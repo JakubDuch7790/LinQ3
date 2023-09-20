@@ -83,7 +83,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Find_earliest_birthday()
         {
-            DateTime result = TestData.People.First().Born;
+            DateTime result = TestData.People.Select(x => x.Born).Min();
 
             Assert.AreEqual(new DateTime(1950, 12, 1), result);
         }
@@ -91,7 +91,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Find_maximum_number()
         {
-            int result = TestData.Numbers.Count();
+            int result = TestData.Numbers.Max();
 
             Assert.AreEqual(5, result);
         }
@@ -99,7 +99,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Find_length_of_longest_animal_name()
         {
-            int result = TestData.Animals.Count();
+            int result = TestData.Animals.Select(x => x.Length).Max();
 
             Assert.AreEqual(9, result);
         }

@@ -107,7 +107,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Find_latest_birthday()
         {
-            DateTime result = TestData.People.First().Born;
+            DateTime result = TestData.People.Select(x => x.Born).Max();
 
             Assert.AreEqual(new DateTime(2001, 5, 21), result);
         }
@@ -115,7 +115,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Find_average_of_numbers()
         {
-            double result = TestData.Numbers.Count();
+            double result = TestData.Numbers.Average();
 
             Assert.AreEqual(-0.2, result);
         }
@@ -123,7 +123,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Find_average_of_birth_years()
         {
-            double result = TestData.People.Count();
+            double result = TestData.People.Average(a => a.Born.Year);
 
             Assert.AreEqual(1978.75, result);
         }

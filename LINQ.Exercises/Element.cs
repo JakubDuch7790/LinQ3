@@ -55,7 +55,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void First_n_greater_than_10_if_not_found_return_0()
         {
-            int result = TestData.Numbers.First();
+            int result = TestData.Numbers.Where(x => x > 10).FirstOrDefault();
 
             Assert.AreEqual(0, result);
         }
@@ -63,7 +63,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Last_n_less_than_minus_1234_if_not_found_return_0()
         {
-            int result = TestData.Numbers.Last();
+            int result = TestData.Numbers.Where(x => x < -1234).LastOrDefault();
 
             Assert.AreEqual(0, result);
         }
@@ -71,7 +71,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Last_elephant()
         {
-            string result = TestData.Animals.Last();
+            string result = TestData.Animals.Where(x => x == "elephant").Last();
 
             Assert.AreEqual("elephant", result);
         }
@@ -79,7 +79,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void First_string_having_4_letters()
         {
-            string result = TestData.Animals.First();
+            string result = TestData.Animals.Where(x => x.Length == 4).First();
 
             Assert.AreEqual("lion", result);
         }

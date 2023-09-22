@@ -87,7 +87,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Last_string_containg_g()
         {
-            string result = TestData.Animals.Last();
+            string result = TestData.Animals.Where(x => x.Contains('g')).Last();
 
             Assert.AreEqual("penguin", result);
         }
@@ -95,7 +95,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void First_string_having_s_as_first_letter()
         {
-            string result = TestData.Animals.First();
+            string result = TestData.Animals.Where(x => x.StartsWith("s")).First();
 
             Assert.AreEqual("swordfish", result);
         }

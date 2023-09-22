@@ -103,7 +103,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Last_three_letter_long_word_or_null()
         {
-            string result = TestData.Animals.Last(s => s.Length == 3);
+            string result = TestData.Animals.Where(s => s.Length == 3).LastOrDefault();
 
             Assert.AreEqual(null, result);
         }
@@ -127,7 +127,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void First_person_born_141th_day_of_year()
         {
-            TestData.Person result = TestData.People.First();
+            TestData.Person result = TestData.People.Where(x => x.Born.DayOfYear == 141).First();
 
             Assert.AreEqual(TestData.People[2], result);
         }
@@ -135,7 +135,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Last_person_whose_firstname_does_not_start_with_J_or_null()
         {
-            TestData.Person result = TestData.People.Last();
+            TestData.Person result = TestData.People.Where(x => x.FirstName.StartsWith("J") != true).LastOrDefault();
 
             Assert.AreEqual(null, result);
         }

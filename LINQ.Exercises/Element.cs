@@ -111,7 +111,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void First_person_born_after_2000()
         {
-            TestData.Person result = TestData.People.First();
+            TestData.Person result = TestData.People.Where(x => x.Born.Year > 2000 ).First();
 
             Assert.AreEqual(TestData.People[2], result);
         }
@@ -119,7 +119,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Last_person_with_lastname_ending_with_l()
         {
-            TestData.Person result = TestData.People.Last();
+            TestData.Person result = TestData.People.Where(x => x.LastName.EndsWith("l")).Last();
 
             Assert.AreEqual(TestData.People[2], result);
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -115,7 +116,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Where_string_ends_with_uppercase_t()
         {
-            IEnumerable<string> result = TestData.Animals.Where(x => x.EndsWith("T"));
+            IEnumerable<string> result = TestData.Animals.Where(x => x.EndsWith("t"));
 
             Assert.IsTrue(new[] { "elephant" }.SequenceEqual(result));
         }
@@ -123,7 +124,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Where_substring_equals_to_io()
         {
-            IEnumerable<string> result = TestData.Animals;
+            IEnumerable<string> result = TestData.Animals.Where(x => x.Contains("io"));
 
             Assert.IsTrue(new[] { "lion" }.SequenceEqual(result));
         }
@@ -131,7 +132,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Where_person_firstname_and_lastname_starts_with_same_letter()
         {
-            IEnumerable<TestData.Person> result = TestData.People.Where(x => x.LastName.EndsWith(x.FirstName[0].ToString()));
+            IEnumerable<TestData.Person> result = TestData.People.Where(x => x.FirstName[0] == x.LastName[0]);
 
             Assert.IsTrue(new[] { TestData.People[3] }.SequenceEqual(result));
         }
@@ -139,7 +140,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Where_person_was_born_before_1990()
         {
-            IEnumerable<TestData.Person> result = TestData.People;
+            IEnumerable<TestData.Person> result = TestData.People.Where(x => x.Born.Year < 1990);
 
             Assert.IsTrue(new[] { TestData.People[1], TestData.People[3] }.SequenceEqual(result));
         }
@@ -152,13 +153,13 @@ namespace LINQ.Exercises
             Assert.IsTrue(new[] { TestData.People[0], TestData.People[3] }.SequenceEqual(result));
         }
 
-        //[TestMethod]
-        //public void Where_person_was_born_on_monday_21st()
-        //{
-        //    IEnumerable<TestData.Person> result = TestData.People.First();
+        [TestMethod]
+        public void Where_person_was_born_on_monday_21st()
+        {
+            IEnumerable<TestData.Person> result = TestData.People.Where(x => x.Born.DayOfWeek == DayOfWeek.Monday && x.Born.Day == 21);
 
-        //    Assert.IsTrue(new[] { TestData.People[2] }.SequenceEqual(result));
-        //}
+            Assert.IsTrue(new[] { TestData.People[2] }.SequenceEqual(result));
+        }
 
         [TestMethod]
         public void Where_person_had_18_years_or_more_in_2000()
@@ -171,7 +172,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Where_person_lastname_contains_ll_and_sum_of_year_month_day_is_greater_than_2000()
         {
-            IEnumerable<TestData.Person> result = TestData.People;
+            IEnumerable<TestData.Person> result = TestData.People.Where(x => x.LastName.Contains("ll") && (x.Born.Year + x.Born.Day > 2000));
 
             Assert.IsTrue(new[] { TestData.People[2] }.SequenceEqual(result));
         }

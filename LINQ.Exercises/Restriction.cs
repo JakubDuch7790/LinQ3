@@ -24,7 +24,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Where_n_is_less_than_or_equal_to_0_returns_expected_ints()
         {
-            IEnumerable<int> result = TestData.Numbers;
+            IEnumerable<int> result = TestData.Numbers.Where(x => x <= 0);
 
             Assert.AreEqual(5, result.Count());
             Assert.IsTrue(new[] { -3, -1, -4, -1, -5 }.SequenceEqual(result));
@@ -33,7 +33,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Where_n_multiplied_by_2_is_greater_than_5()
         {
-            IEnumerable<int> result = TestData.Numbers;
+            IEnumerable<int> result = TestData.Numbers.Where(x => x*2 >= 5);
 
             Assert.IsTrue(new[] { 3, 5 }.SequenceEqual(result));
         }
@@ -41,7 +41,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Where_n_is_even()
         {
-            IEnumerable<int> result = TestData.Numbers;
+            IEnumerable<int> result = TestData.Numbers.Where(x => x%2 == 0);
 
             Assert.IsTrue(new[] { 2, -4 }.SequenceEqual(result));
         }
@@ -49,7 +49,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Where_index_of_n_is_odd()
         {
-            IEnumerable<int> result = TestData.Numbers;
+            IEnumerable<int> result = TestData.Numbers.Where(x => x % 2 != 0);
 
             Assert.IsTrue(new[] { 1, 1, 3, 5 }.SequenceEqual(result));
         }
@@ -57,7 +57,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Where_n_is_even_and_n_is_less_than_0()
         {
-            IEnumerable<int> result = TestData.Numbers;
+            IEnumerable<int> result = TestData.Numbers.Where(x => x % 2 == 0 && x <= 0);
 
             Assert.IsTrue(new[] { -4 }.SequenceEqual(result));
         }

@@ -37,14 +37,14 @@ namespace LINQ.Exercises
         [TestMethod]
         public void OrderWordsAlphabetically_Return5Words()
         {
-            IEnumerable<string> result = TestData.OrderByWordsExtended;
+            IEnumerable<string> result = TestData.OrderByWordsExtended.OrderBy(word => word);
             Assert.IsTrue(result.SequenceEqual(new string[] { "apple", "blueberry", "cherry", "tamarind", "zuchini" }));
         }
 
         [TestMethod]
         public void OrderWordsBySecondLetter_Return5Words()
         {
-            IEnumerable<string> result = TestData.OrderByWordsExtended;
+            IEnumerable<string> result = TestData.OrderByWordsExtended.OrderBy(w => w[1]);
 
             Assert.IsTrue(result.SequenceEqual(new string[] { "tamarind", "cherry", "blueberry", "apple", "zuchini" }));
         }
@@ -53,7 +53,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void OrderWordsByFirstLetterDescendingAlphabetically_Return5Words()
         {
-            IEnumerable<string> result = TestData.OrderByWordsExtended;
+            IEnumerable<string> result = TestData.OrderByWordsExtended.OrderByDescending(w => w[0]);
 
             Assert.IsTrue(result.SequenceEqual(new string[] { "zuchini", "tamarind", "cherry", "blueberry", "apple", }));
         }

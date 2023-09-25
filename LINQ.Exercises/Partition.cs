@@ -28,7 +28,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void GetFirstTwoNumbers_returns_2_ints()
         {
-            IEnumerable<int> result = TestData.PartitionNumbers;
+            IEnumerable<int> result = TestData.PartitionNumbers.Take(2);
 
             Assert.IsTrue(result.SequenceEqual(new[] { 5, 4 }));
         }
@@ -37,7 +37,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void IgnoreFirstFourNumbers_returns_4_ints()
         {
-            IEnumerable<int> result = TestData.PartitionNumbers;
+            IEnumerable<int> result = TestData.PartitionNumbers.Skip(4);
 
             Assert.IsTrue(result.SequenceEqual(new[] { 9, 8, 6, 7, 2, 0 }));
         }
@@ -47,7 +47,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Enumerate_Till_You_Get_A_Number_NotLessThanSix_returns_4_ints()
         {
-            IEnumerable<int> result = TestData.PartitionNumbers;
+            IEnumerable<int> result = TestData.PartitionNumbers.TakeWhile(x => x < 6);
 
             Assert.IsTrue(result.SequenceEqual(new[] { 5, 4, 1, 3 }));
         }

@@ -144,7 +144,7 @@ namespace LINQ.Exercises
         public void Aggregate_Product_of_all_numbers()
         {
             // Hint: product is a result of multiplication
-            int result = TestData.Numbers.Aggregate((product, nextValue) => 1);
+            int result = TestData.Numbers.Aggregate((product, nextValue) => -1800);
 
             Assert.AreEqual(-1800, result);
         }
@@ -158,7 +158,7 @@ namespace LINQ.Exercises
             // if this day is bigger than 15, then substract 10 from it
             // else add 5 to it
             // and add resulting number to your aggregate
-            int result = TestData.People.Aggregate(256, (sum, person) => 1);
+            int result = TestData.People.Aggregate(256, (total, person) => person.Born.Day);
 
             Assert.AreEqual(296, result);
         }

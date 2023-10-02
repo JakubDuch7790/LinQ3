@@ -121,15 +121,15 @@ namespace LINQ.Exercises
             Assert.IsTrue(result.SequenceEqual(new string[] { "apple", "zuchini", "blueberry", "cherry", "tamarind" }));
         }
 
-        //[TestMethod]
-        //public void OrderDoublesFromLargestToSmallest_returnDescendingEnumeration()
-        //{
-        //    double[] doubles = { 1.7, 2.3, 1.9, 4.1, 2.9 };
+        [TestMethod]
+        public void OrderDoublesFromLargestToSmallest_returnDescendingEnumeration()
+        {
+            double[] doubles = { 1.7, 2.3, 1.9, 4.1, 2.9 };
 
-        //    IEnumerable<double> result = doubles.OrderByDescending(d => d.);
+            IEnumerable<double> result = doubles.OrderByDescending(d => d);
 
-        //    Assert.IsTrue(result.SequenceEqual(new double[] { 4.1, 2.9, 2.3, 1.9, 1.7 }));
-        //}
+            Assert.IsTrue(result.SequenceEqual(new double[] { 4.1, 2.9, 2.3, 1.9, 1.7 }));
+        }
 
         [TestMethod]
         public void OrderByBirthDatesOldestToYoungest_returnPersonEnumeration()
@@ -161,7 +161,7 @@ namespace LINQ.Exercises
         public void OrderByLengthAndThenAlphabetically_returnStringNumberation()
         {
             string[] digits = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
-            IEnumerable<string> result = digits.OrderBy(num => num.Length).ToList();
+            IEnumerable<string> result = digits.OrderBy(num => num.Length).ThenBy(num => num);
 
             Assert.IsTrue(result.SequenceEqual(new string[] { "one", "six", "two", "five", "four", "nine", "zero", "eight", "seven", "three" }));
         }
@@ -179,7 +179,7 @@ namespace LINQ.Exercises
 
             string[] words = { "aPPLE", "AbAcUs", "bRaNcH", "BlUeBeRrY", "ClOvEr", "cHeRry" };
 
-            IEnumerable<string> result = words.OrderBy(w => w.Length).ThenBy(w => w[0]).ToList();
+            IEnumerable<string> result = words.OrderBy(w => w.Length).ThenBy(w => w.ToLower());
             Assert.IsTrue(result.SequenceEqual(new string[] { "aPPLE", "AbAcUs", "bRaNcH", "cHeRry", "ClOvEr", "BlUeBeRrY" }));
         }
 

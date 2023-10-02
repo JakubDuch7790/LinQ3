@@ -57,7 +57,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void Enumerate_Till_A_Number_Hit_Which_is_less_than_its_own_array_position_returns_2_ints()
         {
-            IEnumerable<int> result = TestData.PartitionNumbers;
+            IEnumerable<int> result = TestData.PartitionNumbers.TakeWhile((x, index) => x > index);
 
             Assert.IsTrue(result.SequenceEqual(new[] { 5, 4 }));
         }
@@ -67,7 +67,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void GetElementsOfArrayStartingFromTheFirstElementDivisibleByThree_Return7ints()
         {
-            IEnumerable<int> result = TestData.PartitionNumbers;
+            IEnumerable<int> result = TestData.PartitionNumbers.SkipWhile(x => x % 3 != 0);
 
             Assert.IsTrue(result.SequenceEqual(new[] { 3, 9, 8, 6, 7, 2, 0 }));
         }
@@ -77,7 +77,7 @@ namespace LINQ.Exercises
         [TestMethod]
         public void GetElementsStartingFromFirstElementLessThanItsPosition_Return8ints()
         {
-            IEnumerable<int> result = TestData.PartitionNumbers;
+            IEnumerable<int> result = TestData.PartitionNumbers.SkipWhile((x, index) => x > index);
 
             Assert.IsTrue(result.SequenceEqual(new[] { 1, 3, 9, 8, 6, 7, 2, 0 }));
         }

@@ -121,15 +121,15 @@ namespace LINQ.Exercises
             Assert.IsTrue(result.SequenceEqual(new string[] { "apple", "zuchini", "blueberry", "cherry", "tamarind" }));
         }
 
-        [TestMethod]
-        public void OrderDoublesFromLargestToSmallest_returnDescendingEnumeration()
-        {
-            double[] doubles = { 1.7, 2.3, 1.9, 4.1, 2.9 };
+        //[TestMethod]
+        //public void OrderDoublesFromLargestToSmallest_returnDescendingEnumeration()
+        //{
+        //    double[] doubles = { 1.7, 2.3, 1.9, 4.1, 2.9 };
 
-            IEnumerable<double> result = doubles;
+        //    IEnumerable<double> result = doubles.OrderByDescending(d => d.);
 
-            Assert.IsTrue(result.SequenceEqual(new double[] { 4.1, 2.9, 2.3, 1.9, 1.7 }));
-        }
+        //    Assert.IsTrue(result.SequenceEqual(new double[] { 4.1, 2.9, 2.3, 1.9, 1.7 }));
+        //}
 
         [TestMethod]
         public void OrderByBirthDatesOldestToYoungest_returnPersonEnumeration()

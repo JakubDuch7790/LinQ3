@@ -17,9 +17,24 @@ namespace PV178.Homeworks.HW03
         /// <returns>The query result</returns>
         public int AttacksAtoGCountriesMaleBetweenFifteenAndFortyQuery()
         {
-            // TODO...
-            throw new NotImplementedException();
+            return DataContext.Countries.Where(c => c.Name.StartsWith('A') && c.Name.StartsWith('G')).Join(DataContext.SharkAttacks
+                    .Join(DataContext.AttackedPeople.Where(p => p.Age > 15 && p.Age < 40),
+                    sharkAttack => sharkAttack.AttackedPersonId,
+                    attackedPerson => attackedPerson.Id
+                    ))
+            //return DataContext.Countries.Join(DataContext.AttackedPeople,
+            //    country => DataContext.Countries.Where(c => c.Name.StartsWith('A') && c.Name.StartsWith('G')),
+            //    person => DataContext.AttackedPeople.Where(p => p.Age > 15 && p.Age < 40),
+            //    (country, person) => new()
+            //    {
+            //        person = person
+            //    }).ToList().Sum();
+            //return DataContext.Countries.Where(c => c.Name.StartsWith('A') && c.Name.StartsWith('G'))
+            //    .Join(DataContext.AttackedPeople.Where(p => p.Age > 15 && p.Age < 40), country => country.CountryCode, person => person.Age < 15);
+            //return DataContext.Countries.Join(DataContext.AttackedPeople, ) )
         }
+
+        //outerkeyselector? DataContext.Countries.Where(c => c.Name.StartsWith('A') && c.Name.StartsWith('G')),
 
         /// <summary>
         /// Vráti zoznam, v ktorom je textová informácia o každom človeku,

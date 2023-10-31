@@ -34,59 +34,6 @@ namespace PV178.Homeworks.HW03
                 {
                     PersonsFullfillingRequirements = attackedPerson.Id,
                 }).Count();
-            //return DataContext.Countries.Where(c => c.Name.StartsWith('A') || c.Name.StartsWith('G'))
-            //    .Join(DataContext.SharkAttacks,
-            //    country => new { CountryId = country.Id },
-            //    sharkAttack => new { sharkAttack.CountryId },
-            //    (country, sharkAttack) => new
-            //    {
-            //        CountryId = sharkAttack.CountryId,
-            //        AttackedPersonId = sharkAttack.AttackedPersonId,
-            //    }
-            //    ).Count();
-            //var query = DataContext.SharkAttacks.Join(DataContext.Countries.Where(c => c.Name.StartsWith('A') || c.Name.StartsWith('G')),
-            //        sharkAttack => sharkAttack.CountryId,
-            //        country => country.Id,
-            //        (sharkAttack, country) => new()
-            //        {
-            //            sharkAttack.CountryId,
-            //            sharkAttack.AttackedPersonId
-            //        });
-            //return DataContext.SharkAttacks.Join(DataContext.Countries.Where(c => c.Name.StartsWith('A') || c.Name.StartsWith('G')),
-            //        sharkAttack => new { Id = sharkAttack.CountryId },
-            //        country => new { country.Id },
-            //        (sharkAttack, country) => new
-            //        {
-            //            sharkAttack.CountryId,
-            //            sharkAttack.AttackedPersonId,
-            //        }); ;
-            //return DataContext.Countries.Where(c => c.Name.StartsWith('A') && c.Name.StartsWith('G')).Join(DataContext.SharkAttacks
-            //        .Join(DataContext.AttackedPeople.Where(p => p.Age > 15 && p.Age < 40),
-            //        sharkAttack => sharkAttack.AttackedPersonId,
-            //        attackedPerson => attackedPerson.Id,
-            //        (sharkAttack, attackedPerson) => new
-            //        {
-            //            countryID = sharkAttack.CountryId,
-            //            wantedPerson = attackedPerson.Id
-            //        }), country => country.Id,
-            //            personCountryID => personCountryID.countryID,
-            //            (finalCollection) => new()
-            //            {
-            //                finalCollection.
-            //            }).Count();
-            //return DataContext.Countries.Join(DataContext.AttackedPeople,
-            //    country => DataContext.Countries.Where(c => c.Name.StartsWith('A') && c.Name.StartsWith('G')),
-            //    person => DataContext.AttackedPeople.Where(p => p.Age > 15 && p.Age < 40),
-            //    (country, person) => new()
-            //    {
-            //        person = person
-            //    }).ToList().Sum();
-            //return DataContext.Countries.Where(c => c.Name.StartsWith('A') && c.Name.StartsWith('G'))
-            //    .Join(DataContext.AttackedPeople.Where(p => p.Age > 15 && p.Age < 40), country => country.CountryCode, person => person.Age < 15);
-            //return DataContext.Countries.Join(DataContext.AttackedPeople, ) )
-        }
-
-        //outerkeyselector? DataContext.Countries.Where(c => c.Name.StartsWith('A') && c.Name.StartsWith('G')),
 
         /// <summary>
         /// Vráti zoznam, v ktorom je textová informácia o každom človeku,

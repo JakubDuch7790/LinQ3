@@ -2,6 +2,7 @@
 using PV178.Homeworks.HW03.DataLoading.Factory;
 using PV178.Homeworks.HW03.Model;
 using PV178.Homeworks.HW03.Model.Enums;
+using System;
 using System.Diagnostics.Metrics;
 
 namespace PV178.Homeworks.HW03
@@ -18,17 +19,31 @@ namespace PV178.Homeworks.HW03
         /// <returns>The query result</returns>
         public int AttacksAtoGCountriesMaleBetweenFifteenAndFortyQuery()
         {
+            return DataContext.SharkAttacks
+                .Join(DataContext.Countries.Where(c => c.Name.First() >= 'A' && c.Name.First() <= 'G'),
+                sharkAttack => sharkAttack.CountryId,
+                country => country.Id,
+                (sharkAttack, country) => new
+                {
+                    SharkAttackCountryId = sharkAttack.CountryId,
+                    SharkAttackPersonsId = sharkAttack.AttackedPersonId
+                }).Join(DataContext.AttackedPeople.Where(person => person.Sex == Sex.Male && person.Age >= 15 && person.Age <= 40),
+                sharkAttack => sharkAttack.SharkAttackPersonsId,
+                attackedPerson => attackedPerson.Id,
+                (sharkAttack, attackedPerson) => new
+                {
+                    PersonsFullfillingRequirements = attackedPerson.Id,
+                }).Count();
             //return DataContext.Countries.Where(c => c.Name.StartsWith('A') || c.Name.StartsWith('G'))
             //    .Join(DataContext.SharkAttacks,
             //    country => new { CountryId = country.Id },
             //    sharkAttack => new { sharkAttack.CountryId },
             //    (country, sharkAttack) => new
             //    {
-            //       CountryId = sharkAttack.CountryId,
-            //       AttackedPersonId = sharkAttack.AttackedPersonId,
-            //       Id = country.Id
+            //        CountryId = sharkAttack.CountryId,
+            //        AttackedPersonId = sharkAttack.AttackedPersonId,
             //    }
-            //    );
+            //    ).Count();
             //var query = DataContext.SharkAttacks.Join(DataContext.Countries.Where(c => c.Name.StartsWith('A') || c.Name.StartsWith('G')),
             //        sharkAttack => sharkAttack.CountryId,
             //        country => country.Id,
@@ -37,14 +52,14 @@ namespace PV178.Homeworks.HW03
             //            sharkAttack.CountryId,
             //            sharkAttack.AttackedPersonId
             //        });
-            return DataContext.SharkAttacks.Join(DataContext.Countries.Where(c => c.Name.StartsWith('A') || c.Name.StartsWith('G')),
-                    sharkAttack => new { Id = sharkAttack.CountryId },
-                    country => new { country.Id },
-                    (sharkAttack, country) => new
-                    {
-                        sharkAttack.CountryId,
-                        sharkAttack.AttackedPersonId,
-                    }); ;
+            //return DataContext.SharkAttacks.Join(DataContext.Countries.Where(c => c.Name.StartsWith('A') || c.Name.StartsWith('G')),
+            //        sharkAttack => new { Id = sharkAttack.CountryId },
+            //        country => new { country.Id },
+            //        (sharkAttack, country) => new
+            //        {
+            //            sharkAttack.CountryId,
+            //            sharkAttack.AttackedPersonId,
+            //        }); ;
             //return DataContext.Countries.Where(c => c.Name.StartsWith('A') && c.Name.StartsWith('G')).Join(DataContext.SharkAttacks
             //        .Join(DataContext.AttackedPeople.Where(p => p.Age > 15 && p.Age < 40),
             //        sharkAttack => sharkAttack.AttackedPersonId,

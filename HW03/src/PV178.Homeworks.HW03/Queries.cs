@@ -4,6 +4,7 @@ using PV178.Homeworks.HW03.Model;
 using PV178.Homeworks.HW03.Model.Enums;
 using System;
 using System.Diagnostics.Metrics;
+using System.Text.RegularExpressions;
 
 namespace PV178.Homeworks.HW03
 {
@@ -34,6 +35,8 @@ namespace PV178.Homeworks.HW03
                 {
                     PersonsFullfillingRequirements = attackedPerson.Id,
                 }).Count();
+        }
+
 
         /// <summary>
         /// Vráti zoznam, v ktorom je textová informácia o každom človeku,
@@ -44,9 +47,10 @@ namespace PV178.Homeworks.HW03
         /// <returns>The query result</returns>
         public List<string> InfoAboutPeopleWithUnknownNamesAndWasInBahamasQuery()
         {
-            // TODO...
-            throw new NotImplementedException();
-
+            return DataContext.AttackedPeople.Where(attackedPerson => attackedPerson.Name == null
+            || attackedPerson.Name[0] == char.ToLower(attackedPerson.Name[0])
+            || char.IsDigit(attackedPerson.Name[0]))
+                .Join().ToList();
         }
 
         /// <summary>
@@ -126,8 +130,7 @@ namespace PV178.Homeworks.HW03
         /// <returns>The query result</returns>
         public string GovernmentTypePercentagesQuery()
         {
-            // TODO...
-            throw new NotImplementedException();
+            return Console.ReadLine();
         }
 
         /// <summary>
@@ -208,5 +211,6 @@ namespace PV178.Homeworks.HW03
             // TODO...
             throw new NotImplementedException();
         }
+        }
     }
-}
+

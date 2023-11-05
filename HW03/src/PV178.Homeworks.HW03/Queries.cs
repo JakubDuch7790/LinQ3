@@ -47,10 +47,37 @@ namespace PV178.Homeworks.HW03
         /// <returns>The query result</returns>
         public List<string> InfoAboutPeopleWithUnknownNamesAndWasInBahamasQuery()
         {
-            return DataContext.AttackedPeople.Where(attackedPerson => attackedPerson.Name == null
+            return DataContext.AttackedPeople.Where(attackedPerson => attackedPerson.Name == "unknown"
             || attackedPerson.Name[0] == char.ToLower(attackedPerson.Name[0])
             || char.IsDigit(attackedPerson.Name[0]))
-                .Join().ToList();
+                .Join(DataContext.SharkAttacks,
+                attackedPerson => attackedPerson.Id,
+                sharkAttack => sharkAttack.AttackedPersonId,
+                (attackedPerson, sharkAttack) => new 
+                {
+                    AttackedPersonsName = attackedPerson.Name,
+                    SharkAttackCountryId = sharkAttack.CountryId,
+                    SharkAttackSharkSpeciesID = sharkAttack.SharkSpeciesId
+
+                })
+                .Join(DataContext.Countries.Where(country => country.Name == "Bahamas"),
+                    sharkattack => sharkattack.SharkAttackCountryId,
+                    country => country.Id,
+                    (sharkattack, country) => new
+                    {
+                        SharkAttackCountry = country.Name,
+                        FinalName = sharkattack.AttackedPersonsName,
+                        SpieceID = sharkattack.SharkAttackSharkSpeciesID,
+                    })
+                .Join(DataContext.SharkSpecies,
+                    sharkAttack => sharkAttack.SpieceID,
+                    sharkSpiece => sharkSpiece.Id,
+                    (sharkAttack, sharkSpiece) => new
+                    {
+                        SpieceLatinName = sharkSpiece.LatinName,
+                        PersonsName = sharkAttack.FinalName,
+                        CountryName = sharkAttack.SharkAttackCountry
+                    }).Select(obj => obj.PersonsName + " was attacked in " + obj.CountryName + " by " + obj.SpieceLatinName).ToList();
         }
 
         /// <summary>

@@ -89,7 +89,33 @@ namespace PV178.Homeworks.HW03
         public List<string> FiveCountriesWithTopNumberOfAttackSharksLongerThanThreeMetersQuery()
         {
             // TODO...
-            throw new NotImplementedException();
+            return DataContext.Countries.Join(DataContext.SharkAttacks,
+                country => country.Id,
+                sharkAttack => sharkAttack.CountryId,
+                (country, sharkAttack) => new
+                {
+                    CountryName = country.Name,
+                    SharkSpieceID = sharkAttack.SharkSpeciesId,
+                    SAID = sharkAttack.Id
+
+                }).Join(DataContext.SharkSpecies.Where(spiece => spiece.Length >= 3),
+                sharkAttack => sharkAttack.SharkSpieceID,
+                sharkSpiece => sharkSpiece.Id,
+                (sharkAttack, sharkSpece) => new
+                {
+                    CountrysName = sharkAttack.CountryName,
+                    Attack = sharkAttack.SAID
+
+                }).Join(DataContext.AttackedPeople,
+                sa=> sa.Attack,
+                ap => ap.Id,
+                (sa, ap) => new
+                {
+                    FinalAttack = sa.Attack,
+                    FinalCountryName = sa.CountrysName
+                }
+                ).Select(x => x.FinalCountryName).OrderBy(x => x).ToList();
+
         }
 
         /// <summary>

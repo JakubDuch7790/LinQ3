@@ -89,61 +89,61 @@ namespace PV178.Homeworks.HW03
         /// <returns>The query result</returns>
         public List<string> FiveCountriesWithTopNumberOfAttackSharksLongerThanThreeMetersQuery()
         {
-            return DataContext.Countries.Join(DataContext.SharkAttacks,
-                country => country.Id,
-                sharkAttack => sharkAttack.CountryId,
-                (country, sharkAttack) => new
-                {
-                    CountryName = country.Name,
-                    SharkSpieceID = sharkAttack.SharkSpeciesId,
-                    SAID = sharkAttack.Id
+            //return DataContext.Countries.Join(DataContext.SharkAttacks,
+            //    country => country.Id,
+            //    sharkAttack => sharkAttack.CountryId,
+            //    (country, sharkAttack) => new
+            //    {
+            //        CountryName = country.Name,
+            //        SharkSpieceID = sharkAttack.SharkSpeciesId,
+            //        SAID = sharkAttack.Id
 
-                }).Join(DataContext.SharkSpecies.Where(spiece => spiece.Length >= 3),
-                sharkAttack => sharkAttack.SharkSpieceID,
-                sharkSpiece => sharkSpiece.Id,
-                (sharkAttack, sharkSpece) => new
-                {
-                    CountrysName = sharkAttack.CountryName,
-                    Attack = sharkAttack.SAID
+            //    }).Join(DataContext.SharkSpecies.Where(spiece => spiece.Length >= 3),
+            //    sharkAttack => sharkAttack.SharkSpieceID,
+            //    sharkSpiece => sharkSpiece.Id,
+            //    (sharkAttack, sharkSpece) => new
+            //    {
+            //        CountrysName = sharkAttack.CountryName,
+            //        Attack = sharkAttack.SAID
 
-                }).Join(DataContext.AttackedPeople,
-                sharkAttack => sharkAttack.Attack,
-                attackedPerson => attackedPerson.Id,
-                (sharkAttack, attackedPerson) => new
+            //    }).Join(DataContext.AttackedPeople,
+            //    sharkAttack => sharkAttack.Attack,
+            //    attackedPerson => attackedPerson.Id,
+            //    (sharkAttack, attackedPerson) => new
+            //    {
+            //        FinalAttack = sharkAttack.Attack,
+            //        FinalCountryName = sharkAttack.CountrysName
+            //    }
+            //    )
+            //    .Select(x => x.FinalCountryName)
+            //    .GroupBy(i => i)
+            //    .OrderByDescending(g => g.Count())
+            //    .Take(5)
+            //    .Select(g => g.Key)
+            //    .ToList();
+
+            return DataContext.SharkAttacks.Join(DataContext.SharkSpecies.Where(sharkSpiece => sharkSpiece.Length >= 3),
+                SharkAttackSharkSpiece => SharkAttackSharkSpiece.SharkSpeciesId,
+                SharkSpiece => SharkSpiece.Id,
+                (SharkAttackSharkSpiece, SharkSpiece) => new
                 {
-                    FinalAttack = sharkAttack.Attack,
-                    FinalCountryName = sharkAttack.CountrysName
+                    SharkAttackCountryId = SharkAttackSharkSpiece.CountryId
+
+                }).Join(DataContext.Countries,
+                firstJoin => firstJoin.SharkAttackCountryId,
+                secondJoin => secondJoin.Id,
+                (firstJoin, secondJoin) => new
+                {
+                    NamesOfCountries = secondJoin.Name,
                 }
-                )
-                .Select(x => x.FinalCountryName)
+                ).Select(x => x.NamesOfCountries)
                 .GroupBy(i => i)
                 .OrderByDescending(g => g.Count())
                 .Take(5)
                 .Select(g => g.Key)
+                .OrderBy(x => x)
                 .ToList();
-
-        //    return DataContext.SharkAttacks.Join(DataContext.SharkSpecies.Where(sharkSpiece => sharkSpiece.Length >= 3),
-        //        SharkAttackSharkSpiece => SharkAttackSharkSpiece.SharkSpeciesId,
-        //        SharkSpiece => SharkSpiece.Id,
-        //        (SharkAttackSharkSpiece, SharkSpiece) => new
-        //        {
-        //            SharkAttackCountryId = SharkAttackSharkSpiece.CountryId,
-        //            AttackedPersonId = SharkAttackSharkSpiece.AttackedPersonId,
-        //            AttackId = SharkAttackSharkSpiece.Id
-
-        //        }).Join(DataContext.Countries,
-        //firstJoin => firstJoin.SharkAttackCountryId,
-        //secondJoin => secondJoin.Id,
-        //(firstJoin, secondJoin) => new
-        //{
-        //    NamesOfCountries = secondJoin.Name,
-        //}
-        //        ).Select(x=>x.NamesOfCountries).GroupBy(i => i)
-        //    .OrderByDescending(g => g.Count())
-        //    .Take(5)
-        //    .Select(g => g.Key)
-        //    .ToList();
-    }
+        }
     /// <summary>
     /// SFTW chce zistiť, či žraloky berú ohľad na pohlavie obete. 
     /// Vráti informáciu či každý druh žraloka, ktorý je dlhší ako 2 metre

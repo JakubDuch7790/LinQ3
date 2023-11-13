@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace PV178.Homeworks.HW03
 {
+
     public class Queries
     {
         private IDataContext? _dataContext;
@@ -53,7 +54,7 @@ namespace PV178.Homeworks.HW03
                 .Join(DataContext.SharkAttacks,
                 attackedPerson => attackedPerson.Id,
                 sharkAttack => sharkAttack.AttackedPersonId,
-                (attackedPerson, sharkAttack) => new 
+                (attackedPerson, sharkAttack) => new
                 {
                     AttackedPersonsName = attackedPerson.Name,
                     SharkAttackCountryId = sharkAttack.CountryId,
@@ -88,218 +89,207 @@ namespace PV178.Homeworks.HW03
         /// <returns>The query result</returns>
         public List<string> FiveCountriesWithTopNumberOfAttackSharksLongerThanThreeMetersQuery()
         {
-            // TODO...
-            //return DataContext.Countries.Where(country => country.Id == 
-
-            //DataContext.SharkAttacks.Join(DataContext.SharkSpecies.Where(spiece => spiece.Length > 3),
-            //    sharkAttack => sharkAttack.SharkSpeciesId,
-            //    sharkSpiece => sharkSpiece.Id,
-            //    (sharkAttack, sharkSpece) => new
-            //    {
-            //        Attack = sharkAttack.CountryId
-            //    }).Select(x => x.Attack).ToList(
-            //)
-
-            //return DataContext.Countries.Join(DataContext.SharkAttacks,
-            //    country => country.Id,
-            //    sharkAttack => sharkAttack.CountryId,
-            //    (country, sharkAttack) => new
-            //    {
-            //        CountryName = country.Name,
-            //        SharkSpieceID = sharkAttack.SharkSpeciesId,
-            //        SAID = sharkAttack.Id
-
-            //    }).Join(DataContext.SharkSpecies.Where(spiece => spiece.Length >= 3),
-            //    sharkAttack => sharkAttack.SharkSpieceID,
-            //    sharkSpiece => sharkSpiece.Id,
-            //    (sharkAttack, sharkSpece) => new
-            //    {
-            //        CountrysName = sharkAttack.CountryName,
-            //        Attack = sharkAttack.SAID
-
-            //    }).Join(DataContext.AttackedPeople,
-            //    sharkAttack => sharkAttack.Attack,
-            //    attackedPerson => attackedPerson.Id,
-            //    (sharkAttack, attackedPerson) => new
-            //    {
-            //        FinalAttack = sharkAttack.Attack,
-            //        FinalCountryName = sharkAttack.CountrysName
-            //    }
-            //    ).OrderBy(x => x.FinalCountryName).Select(x => x.FinalCountryName.Count(x => x.)).ToList();
-
-            return DataContext.SharkAttacks.Join(DataContext.SharkSpecies.Where(sharkSpiece => sharkSpiece.Length >= 3),
-                SharkAttackSharkSpiece => SharkAttackSharkSpiece.SharkSpeciesId,
-                SharkSpiece => SharkSpiece.Id,
-                (SharkAttackSharkSpiece, SharkSpiece) => new
+            return DataContext.Countries.Join(DataContext.SharkAttacks,
+                country => country.Id,
+                sharkAttack => sharkAttack.CountryId,
+                (country, sharkAttack) => new
                 {
-                    SharkAttackCountryId = SharkAttackSharkSpiece.CountryId,
-                    AttackedPersonId = SharkAttackSharkSpiece.AttackedPersonId,
-                    AttackId = SharkAttackSharkSpiece.Id
+                    CountryName = country.Name,
+                    SharkSpieceID = sharkAttack.SharkSpeciesId,
+                    SAID = sharkAttack.Id
 
-                }).Join(DataContext.Countries,
-                firstJoin => firstJoin.SharkAttackCountryId,
-                secondJoin => secondJoin.Id,
-                (firstJoin, secondJoin) => new
+                }).Join(DataContext.SharkSpecies.Where(spiece => spiece.Length >= 3),
+                sharkAttack => sharkAttack.SharkSpieceID,
+                sharkSpiece => sharkSpiece.Id,
+                (sharkAttack, sharkSpece) => new
                 {
-                    NamesOfCountries = secondJoin.Name,
+                    CountrysName = sharkAttack.CountryName,
+                    Attack = sharkAttack.SAID
+
+                }).Join(DataContext.AttackedPeople,
+                sharkAttack => sharkAttack.Attack,
+                attackedPerson => attackedPerson.Id,
+                (sharkAttack, attackedPerson) => new
+                {
+                    FinalAttack = sharkAttack.Attack,
+                    FinalCountryName = sharkAttack.CountrysName
                 }
-                ).GroupBy(i => i.NamesOfCountries)
-                .GroupBy(grouping => grouping.Count())
-                .OrderBy(x => x)
+                )
+                .Select(x => x.FinalCountryName)
+                .GroupBy(i => i)
+                .OrderByDescending(g => g.Count())
                 .Take(5)
-                .Select(x => x)
+                .Select(g => g.Key)
                 .ToList();
 
-            
+        //    return DataContext.SharkAttacks.Join(DataContext.SharkSpecies.Where(sharkSpiece => sharkSpiece.Length >= 3),
+        //        SharkAttackSharkSpiece => SharkAttackSharkSpiece.SharkSpeciesId,
+        //        SharkSpiece => SharkSpiece.Id,
+        //        (SharkAttackSharkSpiece, SharkSpiece) => new
+        //        {
+        //            SharkAttackCountryId = SharkAttackSharkSpiece.CountryId,
+        //            AttackedPersonId = SharkAttackSharkSpiece.AttackedPersonId,
+        //            AttackId = SharkAttackSharkSpiece.Id
 
-        
-
-        /// <summary>
-        /// SFTW chce zistiť, či žraloky berú ohľad na pohlavie obete. 
-        /// Vráti informáciu či každý druh žraloka, ktorý je dlhší ako 2 metre
-        /// útočil aj na muža aj na ženu.
-        /// </summary>
-        /// <returns>The query result</returns>
-        public bool AreAllLongSharksGenderIgnoringQuery()
-        {
-            // TODO...
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Každý túži po prezývke a žralok nie je výnimkou. Keď na Vás pekne volajú, hneď Vám lepšie chutí. 
-        /// Potrebujeme získať všetkých žralokov, ktorí nemajú prezývku(AlsoKnownAs) a k týmto žralokom krajinu v ktorej najviac útočili.
-        /// Samozrejme to SFTW chce v podobe Dictionary, kde key bude názov žraloka a value názov krajiny.
-        /// Len si predstavte tie rôznorodé prezývky, napr. Devil of Kyrgyzstan.
-        /// </summary>
-        /// <returns>The query result</returns>
-        public Dictionary<string, string> SharksWithoutNickNameAndCountryWithMostAttacksQuery()
-        {
-            // TODO...
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Ohúrili ste SFTW natoľko, že si u Vás objednali rovno textové výpisy. Samozrejme, že sa to dá zvladnúť pomocou LINQ. 
-        /// Chcú aby ste pre všetky fatálne útoky v štátoch na písmenko 'D' a 'E', urobili výpis v podobe: 
-        /// "{Meno obete} (iba ak sa začína na veľké písmeno) was attacked in {názov štátu} by {latinský názov žraloka}"
-        /// Získané pole zoraďte abecedne a vraťte prvých 5 viet.
-        /// </summary>
-        /// <returns>The query result</returns>
-        public List<string> InfoAboutPeopleAndCountriesOnDorEAndFatalAttacksQuery()
-        {
-            // TODO...
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// SFTW pretlačil nový zákon. Chce pokutovať štáty v Afrike.
-        /// Každý z týchto štátov dostane pokutu za každý útok na ich území a to buď 250 meny danej krajiny alebo 300 meny danej krajiny (ak bol fatálny).
-        /// Ak útok nebol preukázany ako fatal alebo non-fatal, štát za takýto útok nie je pokutovaný. Vyberte prvých 5 štátov s najvyššou pokutou.
-        /// Vety budú zoradené zostupne podľa výšky pokuty.
-        /// Opäť od Vás požadujú neštandardné formátovanie: "{Názov krajiny}: {Pokuta} {Mena danej krajiny}"
-        /// Egypt: 10150 EGP
-        /// Senegal: 2950 XOF
-        /// Kenya: 2800 KES
-        /// </summary>
-        /// <returns>The query result</returns>
-        public List<string> InfoAboutFinesOfAfricanCountriesTopFiveQuery()
-        {
-            // TODO...
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// CEO chce kandidovať na prezidenta celej planéty. Chce zistiť ako ma štylizovať svoju rétoriku aby zaujal čo najviac krajín.
-        /// Preto od Vás chce, aby ste mu pomohli zistiť aké percentuálne zastúpenie majú jednotlivé typy vlád.
-        /// Požaduje to ako jeden string: "{typ vlády}: {percentuálne zastúpenie}%, ...". 
-        /// Výstup je potrebné mať zoradený, od najväčších percent po najmenšie a percentá sa budú zaokrúhľovať na jedno desatinné číslo.
-        /// Pre zlúčenie použite Aggregate(..).
-        /// </summary>
-        /// <returns>The query result</returns>
-        public string GovernmentTypePercentagesQuery()
-        {
-            return Console.ReadLine();
-        }
-
-        /// <summary>
-        /// Oslovili nás surfisti. Chcú vedieť, či sú ako skupina viacej ohrození žralokmi. 
-        /// Súrne potrebujeme vedieť koľko bolo fatálnych útokov na surfistov("surf", "Surf", "SURF") 
-        /// a aký bol ich premierný vek(zaokrúliť na 2 desatinné miesta). 
-        /// Zadávateľ úlohy nám to, ale skomplikoval. Tieto údaje chce pre každý kontinent.
-        /// </summary>
-        /// <returns>The query result</returns>
-        public Dictionary<string, Tuple<int, double>> InfoForSurfersByContinentQuery()
-        {
-            // TODO...
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Zaujíma nás 10 najťažších žralokov na planéte a krajiny Severnej Ameriky. 
-        /// CEO požaduje zoznam dvojíc, kde pre každý štát z danej množiny bude uvedený zoznam žralokov z danej množiny, ktorí v tom štáte útočili.
-        /// Pokiaľ v nejakom štáte neútočil žiaden z najťažších žralokov, zoznam žralokov bude prázdny.
-        /// SFTW požaduje prvých 5 položiek zoznamu dvojíc, zoradeného abecedne podľa mien štátov.
-
-        /// </summary>
-        /// <returns>The query result</returns>
-        public List<Tuple<string, List<SharkSpecies>>> HeaviestSharksInNorthAmericaQuery()
-        {
-            // TODO...
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Zistite nám prosím všetky útoky spôsobené pri člnkovaní (attack type "Boating"), ktoré mal na vine žralok s prezývkou "White death". 
-        /// Zaujímajú nás útoky z obdobia po 3.3.1960 (vrátane) a ľudia, ktorých meno začína na písmeno z intervalu <U, Z>.
-        /// Výstup požadujeme ako zoznam mien zoradených abecedne.
-        /// </summary>
-        /// <returns>The query result</returns>
-        public List<string> NonFatalAttemptOfWhiteDeathOnPeopleBetweenUAndZQuery()
-        {
-            // TODO...
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Myslíme si, že rýchlejší žralok ma plnší žalúdok. 
-        /// Požadujeme údaj o tom koľko percent útokov má na svedomí najrýchlejší a najpomalší žralok.
-        /// Výstup požadujeme vo formáte: "{percentuálne zastúpenie najrýchlejšieho}% vs {percentuálne zastúpenie najpomalšieho}%"
-        /// Perc. zastúpenie zaokrúhlite na jedno desatinné miesto.
-        /// </summary>
-        /// <returns>The query result</returns>
-        public string FastestVsSlowestSharkQuery()
-        {
-            // TODO...
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Prišla nám požiadavka z hora, aby sme im vrátili zoznam, 
-        /// v ktorom je textová informácia o KAŽDOM človeku na ktorého zaútočil žralok v štáte Bahamas.
-        /// Táto informácia je taktiež v tvare:
-        /// {meno človeka} was attacked by {latinský názov žraloka}
-        /// 
-        /// Ale pozor váš nový nadriadený ma panický strach z operácie Join alebo GroupJoin.
-        /// Nariadil vám použiť metódu Zip.
-        /// Zistite teda tieto informácie bez spojenia hocijakých dvoch tabuliek a s použitím metódy Zip.
-        /// </summary>
-        /// <returns>The query result</returns>
-        public List<string> AttackedPeopleInBahamasWithoutJoinQuery()
-        {
-            // TODO...
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Vráti počet útokov podľa mien žralokov, ktoré sa stali v Austrálii, vo formáte {meno žraloka}: {počet útokov}
-        /// </summary>
-        /// <returns>The query result</returns>
-        public List<string> MostThreateningSharksInAustralia()
-        {
-            // TODO...
-            throw new NotImplementedException();
-        }
-        }
+        //        }).Join(DataContext.Countries,
+        //firstJoin => firstJoin.SharkAttackCountryId,
+        //secondJoin => secondJoin.Id,
+        //(firstJoin, secondJoin) => new
+        //{
+        //    NamesOfCountries = secondJoin.Name,
+        //}
+        //        ).Select(x=>x.NamesOfCountries).GroupBy(i => i)
+        //    .OrderByDescending(g => g.Count())
+        //    .Take(5)
+        //    .Select(g => g.Key)
+        //    .ToList();
     }
+    /// <summary>
+    /// SFTW chce zistiť, či žraloky berú ohľad na pohlavie obete. 
+    /// Vráti informáciu či každý druh žraloka, ktorý je dlhší ako 2 metre
+    /// útočil aj na muža aj na ženu.
+    /// </summary>
+    /// <returns>The query result</returns>
+    public bool AreAllLongSharksGenderIgnoringQuery()
+    {
+        // TODO...
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Každý túži po prezývke a žralok nie je výnimkou. Keď na Vás pekne volajú, hneď Vám lepšie chutí. 
+    /// Potrebujeme získať všetkých žralokov, ktorí nemajú prezývku(AlsoKnownAs) a k týmto žralokom krajinu v ktorej najviac útočili.
+    /// Samozrejme to SFTW chce v podobe Dictionary, kde key bude názov žraloka a value názov krajiny.
+    /// Len si predstavte tie rôznorodé prezývky, napr. Devil of Kyrgyzstan.
+    /// </summary>
+    /// <returns>The query result</returns>
+    public Dictionary<string, string> SharksWithoutNickNameAndCountryWithMostAttacksQuery()
+    {
+        // TODO...
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Ohúrili ste SFTW natoľko, že si u Vás objednali rovno textové výpisy. Samozrejme, že sa to dá zvladnúť pomocou LINQ. 
+    /// Chcú aby ste pre všetky fatálne útoky v štátoch na písmenko 'D' a 'E', urobili výpis v podobe: 
+    /// "{Meno obete} (iba ak sa začína na veľké písmeno) was attacked in {názov štátu} by {latinský názov žraloka}"
+    /// Získané pole zoraďte abecedne a vraťte prvých 5 viet.
+    /// </summary>
+    /// <returns>The query result</returns>
+    public List<string> InfoAboutPeopleAndCountriesOnDorEAndFatalAttacksQuery()
+    {
+        // TODO...
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// SFTW pretlačil nový zákon. Chce pokutovať štáty v Afrike.
+    /// Každý z týchto štátov dostane pokutu za každý útok na ich území a to buď 250 meny danej krajiny alebo 300 meny danej krajiny (ak bol fatálny).
+    /// Ak útok nebol preukázany ako fatal alebo non-fatal, štát za takýto útok nie je pokutovaný. Vyberte prvých 5 štátov s najvyššou pokutou.
+    /// Vety budú zoradené zostupne podľa výšky pokuty.
+    /// Opäť od Vás požadujú neštandardné formátovanie: "{Názov krajiny}: {Pokuta} {Mena danej krajiny}"
+    /// Egypt: 10150 EGP
+    /// Senegal: 2950 XOF
+    /// Kenya: 2800 KES
+    /// </summary>
+    /// <returns>The query result</returns>
+    public List<string> InfoAboutFinesOfAfricanCountriesTopFiveQuery()
+    {
+        // TODO...
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// CEO chce kandidovať na prezidenta celej planéty. Chce zistiť ako ma štylizovať svoju rétoriku aby zaujal čo najviac krajín.
+    /// Preto od Vás chce, aby ste mu pomohli zistiť aké percentuálne zastúpenie majú jednotlivé typy vlád.
+    /// Požaduje to ako jeden string: "{typ vlády}: {percentuálne zastúpenie}%, ...". 
+    /// Výstup je potrebné mať zoradený, od najväčších percent po najmenšie a percentá sa budú zaokrúhľovať na jedno desatinné číslo.
+    /// Pre zlúčenie použite Aggregate(..).
+    /// </summary>
+    /// <returns>The query result</returns>
+    public string GovernmentTypePercentagesQuery()
+    {
+        return Console.ReadLine();
+    }
+
+    /// <summary>
+    /// Oslovili nás surfisti. Chcú vedieť, či sú ako skupina viacej ohrození žralokmi. 
+    /// Súrne potrebujeme vedieť koľko bolo fatálnych útokov na surfistov("surf", "Surf", "SURF") 
+    /// a aký bol ich premierný vek(zaokrúliť na 2 desatinné miesta). 
+    /// Zadávateľ úlohy nám to, ale skomplikoval. Tieto údaje chce pre každý kontinent.
+    /// </summary>
+    /// <returns>The query result</returns>
+    public Dictionary<string, Tuple<int, double>> InfoForSurfersByContinentQuery()
+    {
+        // TODO...
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Zaujíma nás 10 najťažších žralokov na planéte a krajiny Severnej Ameriky. 
+    /// CEO požaduje zoznam dvojíc, kde pre každý štát z danej množiny bude uvedený zoznam žralokov z danej množiny, ktorí v tom štáte útočili.
+    /// Pokiaľ v nejakom štáte neútočil žiaden z najťažších žralokov, zoznam žralokov bude prázdny.
+    /// SFTW požaduje prvých 5 položiek zoznamu dvojíc, zoradeného abecedne podľa mien štátov.
+
+    /// </summary>
+    /// <returns>The query result</returns>
+    public List<Tuple<string, List<SharkSpecies>>> HeaviestSharksInNorthAmericaQuery()
+    {
+        // TODO...
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Zistite nám prosím všetky útoky spôsobené pri člnkovaní (attack type "Boating"), ktoré mal na vine žralok s prezývkou "White death". 
+    /// Zaujímajú nás útoky z obdobia po 3.3.1960 (vrátane) a ľudia, ktorých meno začína na písmeno z intervalu <U, Z>.
+    /// Výstup požadujeme ako zoznam mien zoradených abecedne.
+    /// </summary>
+    /// <returns>The query result</returns>
+    public List<string> NonFatalAttemptOfWhiteDeathOnPeopleBetweenUAndZQuery()
+    {
+        // TODO...
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Myslíme si, že rýchlejší žralok ma plnší žalúdok. 
+    /// Požadujeme údaj o tom koľko percent útokov má na svedomí najrýchlejší a najpomalší žralok.
+    /// Výstup požadujeme vo formáte: "{percentuálne zastúpenie najrýchlejšieho}% vs {percentuálne zastúpenie najpomalšieho}%"
+    /// Perc. zastúpenie zaokrúhlite na jedno desatinné miesto.
+    /// </summary>
+    /// <returns>The query result</returns>
+    public string FastestVsSlowestSharkQuery()
+    {
+        // TODO...
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Prišla nám požiadavka z hora, aby sme im vrátili zoznam, 
+    /// v ktorom je textová informácia o KAŽDOM človeku na ktorého zaútočil žralok v štáte Bahamas.
+    /// Táto informácia je taktiež v tvare:
+    /// {meno človeka} was attacked by {latinský názov žraloka}
+    /// 
+    /// Ale pozor váš nový nadriadený ma panický strach z operácie Join alebo GroupJoin.
+    /// Nariadil vám použiť metódu Zip.
+    /// Zistite teda tieto informácie bez spojenia hocijakých dvoch tabuliek a s použitím metódy Zip.
+    /// </summary>
+    /// <returns>The query result</returns>
+    public List<string> AttackedPeopleInBahamasWithoutJoinQuery()
+    {
+        // TODO...
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Vráti počet útokov podľa mien žralokov, ktoré sa stali v Austrálii, vo formáte {meno žraloka}: {počet útokov}
+    /// </summary>
+    /// <returns>The query result</returns>
+    public List<string> MostThreateningSharksInAustralia()
+    {
+        // TODO...
+        throw new NotImplementedException();
+    }
+    }
+}
 

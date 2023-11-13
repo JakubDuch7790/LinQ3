@@ -125,22 +125,34 @@ namespace PV178.Homeworks.HW03
             //        FinalAttack = sharkAttack.Attack,
             //        FinalCountryName = sharkAttack.CountrysName
             //    }
-            //    ).Select(country => country.FinalCountryName.Take(5).OrderBy(attack => attack.ToString())).ToList();
+            //    ).OrderBy(x => x.FinalCountryName).Select(x => x.FinalCountryName.Count(x => x.)).ToList();
 
             return DataContext.SharkAttacks.Join(DataContext.SharkSpecies.Where(sharkSpiece => sharkSpiece.Length >= 3),
                 SharkAttackSharkSpiece => SharkAttackSharkSpiece.SharkSpeciesId,
                 SharkSpiece => SharkSpiece.Id,
                 (SharkAttackSharkSpiece, SharkSpiece) => new
                 {
-                    SharkAttackCountryId = SharkAttackSharkSpiece.SharkSpeciesId,
-                    AttackedPersonId = SharkAttackSharkSpiece.AttackedPersonId
+                    SharkAttackCountryId = SharkAttackSharkSpiece.CountryId,
+                    AttackedPersonId = SharkAttackSharkSpiece.AttackedPersonId,
+                    AttackId = SharkAttackSharkSpiece.Id
 
-                }).Join(DataContext.AttackedPeoples)
-                
-                
-                ;
+                }).Join(DataContext.Countries,
+                firstJoin => firstJoin.SharkAttackCountryId,
+                secondJoin => secondJoin.Id,
+                (firstJoin, secondJoin) => new
+                {
+                    NamesOfCountries = secondJoin.Name,
+                }
+                ).GroupBy(i => i.NamesOfCountries)
+                .GroupBy(grouping => grouping.Count())
+                .OrderBy(x => x)
+                .Take(5)
+                .Select(x => x)
+                .ToList();
 
-        }
+            
+
+        
 
         /// <summary>
         /// SFTW chce zistiť, či žraloky berú ohľad na pohlavie obete. 

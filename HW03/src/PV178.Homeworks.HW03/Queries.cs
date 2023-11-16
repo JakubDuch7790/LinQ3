@@ -89,38 +89,6 @@ namespace PV178.Homeworks.HW03
         /// <returns>The query result</returns>
         public List<string> FiveCountriesWithTopNumberOfAttackSharksLongerThanThreeMetersQuery()
         {
-            //return DataContext.Countries.Join(DataContext.SharkAttacks,
-            //    country => country.Id,
-            //    sharkAttack => sharkAttack.CountryId,
-            //    (country, sharkAttack) => new
-            //    {
-            //        CountryName = country.Name,
-            //        SharkSpieceID = sharkAttack.SharkSpeciesId,
-            //        SAID = sharkAttack.Id
-
-            //    }).Join(DataContext.SharkSpecies.Where(spiece => spiece.Length >= 3),
-            //    sharkAttack => sharkAttack.SharkSpieceID,
-            //    sharkSpiece => sharkSpiece.Id,
-            //    (sharkAttack, sharkSpece) => new
-            //    {
-            //        CountrysName = sharkAttack.CountryName,
-            //        Attack = sharkAttack.SAID
-
-            //    }).Join(DataContext.AttackedPeople,
-            //    sharkAttack => sharkAttack.Attack,
-            //    attackedPerson => attackedPerson.Id,
-            //    (sharkAttack, attackedPerson) => new
-            //    {
-            //        FinalAttack = sharkAttack.Attack,
-            //        FinalCountryName = sharkAttack.CountrysName
-            //    }
-            //    )
-            //    .Select(x => x.FinalCountryName)
-            //    .GroupBy(i => i)
-            //    .OrderByDescending(g => g.Count())
-            //    .Take(5)
-            //    .Select(g => g.Key)
-            //    .ToList();
 
             return DataContext.SharkAttacks.Join(DataContext.SharkSpecies.Where(sharkSpiece => sharkSpiece.Length >= 3),
                 SharkAttackSharkSpiece => SharkAttackSharkSpiece.SharkSpeciesId,
@@ -152,8 +120,18 @@ namespace PV178.Homeworks.HW03
     /// <returns>The query result</returns>
     public bool AreAllLongSharksGenderIgnoringQuery()
     {
-        // TODO...
-        throw new NotImplementedException();
+            return DataContext.SharkAttacks.Join(DataContext.SharkSpecies.Where(sharkSpiece => sharkSpiece.Length > 2),
+                sharkAttack => sharkAttack.SharkSpeciesId,
+                sharkSpiece => sharkSpiece.Id,
+                (sharkAttack, sharkSpiece) => new 
+                {
+                    SharkAttackPerson = sharkAttack.AttackedPersonId,
+                    SharkSpiece = sharkSpiece.Id,
+                })
+                .Join(DataContext.AttackedPeople,
+                firstJoin => firstJoin.SharkAttackPerson,
+                secondJoin => secondJoin.Id,
+                (firstJoin, secondJoin)
     }
 
     /// <summary>

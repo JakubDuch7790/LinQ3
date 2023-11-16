@@ -131,7 +131,10 @@ namespace PV178.Homeworks.HW03
                 .Join(DataContext.AttackedPeople,
                 firstJoin => firstJoin.SharkAttackPerson,
                 secondJoin => secondJoin.Id,
-                (firstJoin, secondJoin)
+                (firstJoin, secondJoin) => new
+                {
+
+                }).Select()
     }
 
     /// <summary>
@@ -143,9 +146,40 @@ namespace PV178.Homeworks.HW03
     /// <returns>The query result</returns>
     public Dictionary<string, string> SharksWithoutNickNameAndCountryWithMostAttacksQuery()
     {
-        // TODO...
-        throw new NotImplementedException();
-    }
+
+            return DataContext.SharkAttacks.Join(DataContext.Countries,
+                sa => sa.CountryId,
+                c => c.Id,
+                (sa, c) => new
+                {
+                    CountryName = c.Name,
+                    SharkSpieceID = sa.SharkSpeciesId,
+                })
+                .Join(DataContext.SharkSpecies.Where(ss => string.IsNullOrEmpty(ss.AlsoKnownAs)),
+                firstJoin => firstJoin.SharkSpieceID,
+                secondJoin => secondJoin.Id,
+                (firstJoin, secondJoin) => new
+                {
+                    SharkName = secondJoin.Name,
+                    Country = firstJoin.CountryName
+                })
+                //.Select(x => x.Country)
+                //.GroupBy(i => i)
+                //.OrderByDescending(g => g.Count())
+                //.Select(g => g.Key)
+                .ToDictionary(k => k.SharkName, v => v.Country);
+            //return DataContext.SharkSpecies.Where(ss => string.IsNullOrEmpty(ss.AlsoKnownAs))
+            //    .Join(DataContext.SharkAttacks,
+            //    sharkSpiece => sharkSpiece.Id,
+            //    sharkAttack => sharkAttack.SharkSpeciesId,
+            //    (sharkSpiece, sharkAttack) => new
+            //    {
+            //        SharkName = sharkSpiece.Name,
+            //        CountryID = sharkAttack.CountryId,
+
+
+            //    })
+        }
 
     /// <summary>
     /// Ohúrili ste SFTW natoľko, že si u Vás objednali rovno textové výpisy. Samozrejme, že sa to dá zvladnúť pomocou LINQ. 

@@ -90,9 +90,17 @@ namespace PV178.Homeworks.HW03.Tests
                 "Salmon shark",
                 "Spinner shark"
             };
+            
+
             var expectedCountries = Enumerable.Repeat("Australia", 11).ToList();
 
             var result = Queries.SharksWithoutNickNameAndCountryWithMostAttacksQuery();
+
+            //Console.WriteLine(result.Keys);
+            //Console.WriteLine("---------------------");
+            //Console.WriteLine(result.Values);
+
+
             var sharksResult = result.Keys.OrderBy(x => x);
             var countriesResult = result.Values;
 

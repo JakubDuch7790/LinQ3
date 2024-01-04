@@ -4,6 +4,7 @@ using PV178.Homeworks.HW03.Model;
 using PV178.Homeworks.HW03.Model.Enums;
 using System;
 using System.Diagnostics.Metrics;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace PV178.Homeworks.HW03
@@ -120,54 +121,80 @@ namespace PV178.Homeworks.HW03
     /// <returns>The query result</returns>
     public bool AreAllLongSharksGenderIgnoringQuery()
     {
-            return DataContext.SharkAttacks.Join(DataContext.SharkSpecies.Where(sharkSpiece => sharkSpiece.Length > 2),
-                sharkAttack => sharkAttack.SharkSpeciesId,
-                sharkSpiece => sharkSpiece.Id,
-                (sharkAttack, sharkSpiece) => new 
-                {
-                    SharkAttackPerson = sharkAttack.AttackedPersonId,
-                    SharkSpiece = sharkSpiece.Id,
-                })
-                .Join(DataContext.AttackedPeople,
-                firstJoin => firstJoin.SharkAttackPerson,
-                secondJoin => secondJoin.Id,
-                (firstJoin, secondJoin) => new
-                {
+            return true;
+            //return DataContext.SharkAttacks.Join(DataContext.SharkSpecies.Where(sharkSpiece => sharkSpiece.Length > 2),
+            //    sharkAttack => sharkAttack.SharkSpeciesId,
+            //    sharkSpiece => sharkSpiece.Id,
+            //    (sharkAttack, sharkSpiece) => new 
+            //    {
+            //        SharkAttackPerson = sharkAttack.AttackedPersonId,
+            //        SharkSpiece = sharkSpiece.Id,
+            //    })
+            //    .Join(DataContext.AttackedPeople,
+            //    firstJoin => firstJoin.SharkAttackPerson,
+            //    secondJoin => secondJoin.Id,
+            //    (firstJoin, secondJoin) => new
+            //    {
 
-                }).Select()
+            //    }).Select()
     }
 
-    /// <summary>
-    /// Každý túži po prezývke a žralok nie je výnimkou. Keď na Vás pekne volajú, hneď Vám lepšie chutí. 
-    /// Potrebujeme získať všetkých žralokov, ktorí nemajú prezývku(AlsoKnownAs) a k týmto žralokom krajinu v ktorej najviac útočili.
-    /// Samozrejme to SFTW chce v podobe Dictionary, kde key bude názov žraloka a value názov krajiny.
-    /// Len si predstavte tie rôznorodé prezývky, napr. Devil of Kyrgyzstan.
-    /// </summary>
-    /// <returns>The query result</returns>
-    public Dictionary<string, string> SharksWithoutNickNameAndCountryWithMostAttacksQuery()
-    {
-
-            return DataContext.SharkAttacks.Join(DataContext.Countries,
-                sa => sa.CountryId,
-                c => c.Id,
-                (sa, c) => new
+        /// <summary>
+        /// Každý túži po prezývke a žralok nie je výnimkou. Keď na Vás pekne volajú, hneď Vám lepšie chutí. 
+        /// Potrebujeme získať všetkých žralokov, ktorí nemajú prezývku(AlsoKnownAs) a k týmto žralokom krajinu v ktorej najviac útočili.
+        /// Samozrejme to SFTW chce v podobe Dictionary, kde key bude názov žraloka a value názov krajiny.
+        /// Len si predstavte tie rôznorodé prezývky, napr. Devil of Kyrgyzstan.
+        /// </summary>
+        /// <returns>The query result</returns>
+        public Dictionary<string, string> SharksWithoutNickNameAndCountryWithMostAttacksQuery()
+        {
+            return DataContext.SharkSpecies.Where(ss => string.IsNullOrEmpty(ss.AlsoKnownAs))
+                .Join(DataContext.SharkAttacks,
+                firstJoin => firstJoin.Id,
+                secondJoin => secondJoin.SharkSpeciesId,
+                (firstJoin, secondJoin) => new
                 {
-                    CountryName = c.Name,
-                    SharkSpieceID = sa.SharkSpeciesId,
+                    secondJoin.CountryId,
+                    firstJoin.Name,
+
                 })
-                .Join(DataContext.SharkSpecies.Where(ss => string.IsNullOrEmpty(ss.AlsoKnownAs)),
-                firstJoin => firstJoin.SharkSpieceID,
+                .Join(DataContext.Countries,
+                firstJoin => firstJoin.CountryId,
                 secondJoin => secondJoin.Id,
                 (firstJoin, secondJoin) => new
                 {
-                    SharkName = secondJoin.Name,
-                    Country = firstJoin.CountryName
+                    countryName = secondJoin.Name,
+                    sharkName = firstJoin.Name
                 })
-                //.Select(x => x.Country)
-                //.GroupBy(i => i)
-                //.OrderByDescending(g => g.Count())
-                //.Select(g => g.Key)
-                .ToDictionary(k => k.SharkName, v => v.Country);
+                .GroupBy(c => c)
+                .OrderByDescending(cn => cn.Count())
+                .Select(c => c.Key)
+                                .Distinct()
+
+                .ToDictionary(k => k.sharkName, c => c.countryName);
+                
+                
+            //return DataContext.SharkAttacks.Join(DataContext.Countries,
+            //    sa => sa.CountryId,
+            //    c => c.Id,
+            //    (sa, c) => new
+            //    {
+            //        CountryName = c.Name,
+            //        SharkSpieceID = sa.SharkSpeciesId,
+            //    })
+            //    .Join(DataContext.SharkSpecies.Where(ss => string.IsNullOrEmpty(ss.AlsoKnownAs)),
+            //    firstJoin => firstJoin.SharkSpieceID,
+            //    secondJoin => secondJoin.Id,
+            //    (firstJoin, secondJoin) => new
+            //    {
+            //        SharkName = secondJoin.Name,
+            //        Country = firstJoin.CountryName
+            //    })
+            //    //.Select(x => x.Country)
+            //    //.GroupBy(i => i)
+            //    //.OrderByDescending(g => g.Count())
+            //    //.Select(g => g.Key)
+            //    .ToDictionary(k => k.SharkName, v => v.Country);
             //return DataContext.SharkSpecies.Where(ss => string.IsNullOrEmpty(ss.AlsoKnownAs))
             //    .Join(DataContext.SharkAttacks,
             //    sharkSpiece => sharkSpiece.Id,
